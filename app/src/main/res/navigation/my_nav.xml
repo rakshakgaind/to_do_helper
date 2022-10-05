@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_nav"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.project.smart_to_do.fragments.list.ListFragment"
+        android:label="Tasks"
+        tools:layout="@layout/fragment_list" >
+        <action
+            android:id="@+id/action_listFragment_to_addingFragment"
+            app:destination="@id/addingFragment" />
+        <action
+            android:id="@+id/action_listFragment_to_updateTaskDialogFragment"
+            app:destination="@id/updateTaskDialogFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_doneFragment"
+            app:destination="@id/doneFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/from_left" />
+        <action
+            android:id="@+id/action_homeFragment_to_calendarFragment2"
+            app:destination="@id/calendarFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/addingFragment"
+        android:name="com.project.smart_to_do.fragments.dialogs.AddingBottomSheetDialog"
+        android:label="Adding task"
+        tools:layout="@layout/fragment_adding" >
+        <action
+            android:id="@+id/action_addingFragment_to_listFragment"
+            app:destination="@id/homeFragment" />
+    </dialog>
+    <dialog
+        android:id="@+id/updateTaskDialogFragment"
+        android:name="com.project.smart_to_do.fragments.dialogs.UpdateTaskDialogFragment"
+        android:label="UpdateTaskDialogFragment" >
+        <action
+            android:id="@+id/action_updateTaskDialogFragment_to_listFragment"
+            app:destination="@id/homeFragment" />
+        <argument
+            android:name="currentTask"
+            app:argType="com.project.smart_to_do.data.Task" />
+        <action
+            android:id="@+id/action_updateTaskDialogFragment_to_calendarFragment"
+            app:destination="@id/calendarFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/doneFragment"
+        android:name="com.project.smart_to_do.fragments.bins.TrashBinFragment"
+        android:label="fragment_trash_bin"
+        tools:layout="@layout/fragment_trash_bin" >
+        <action
+            android:id="@+id/action_doneFragment_to_updateTaskDialogFragment"
+            app:destination="@id/updateTaskDialogFragment" />
+        <action
+            android:id="@+id/action_doneFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_doneFragment_to_calendarFragment2"
+            app:destination="@id/calendarFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="com.project.smart_to_do.fragments.calendar.CalendarFragment"
+        android:label="Calendar"
+        tools:layout="@layout/fragment_calendar" >
+        <action
+            android:id="@+id/action_calendarFragment2_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_calendarFragment2_to_doneFragment"
+            app:destination="@id/doneFragment" />
+        <action
+            android:id="@+id/action_calendarFragment_to_updateTaskDialogFragment"
+            app:destination="@id/updateTaskDialogFragment" />
+    </fragment>
+</navigation>

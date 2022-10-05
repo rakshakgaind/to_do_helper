@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3D52D5</color>
+    <color name="colorPrimaryDark">#c96f53</color>
+    <color name="colorAccent">#ff9e80</color>
+    <color name="bgBottomNavigation">#dd2c00</color>
+    <color name="purple_200">#ffd0b0</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="white_bg">#f6f6f6</color>
+    <color name="gone">#9e9e9e</color>
+    <color name="done_layout_bg">#bcaefd</color>
+    <color name="red"> #f51000</color>
+    <color name="primaryGrey"> #3C3744</color>
+
+    <color name="grey_1">#AFACAC</color>
+    <color name="txt_white">#FFFFFF</color>
+    <color name="txt_black">#000000</color>
+    <color name="txt_grey">#AFACAC</color>
+
+    <color name="primaryColor">#3d52d5</color>
+    <color name="primaryLightColor">#797eff</color>
+    <color name="primaryDarkColor">#002aa3</color>
+    <color name="primaryTextColor">#ffffff</color>
+
+
+    <color name="secondaryColor">#455a64</color>
+    <color name="secondaryLightColor">#718792</color>
+    <color name="secondaryDarkColor">#1c313a</color>
+    <color name="secondaryTextColor">#ffffff</color>
+</resources>

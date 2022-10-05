@@ -1,0 +1,111 @@
+package com.project.smart_to_do.fragments.calendar
+
+import android.os.Bundle
+import android.text.format.DateUtils
+import android.view.View
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.sundeepk.compactcalendarview.CompactCalendarView.CompactCalendarViewListener
+import com.github.sundeepk.compactcalendarview.domain.Event
+import com.project.smart_to_do.R
+import com.project.smart_to_do.adapters.CalendarPickerAdapter
+import com.project.smart_to_do.databinding.FragmentCalendarBinding
+import com.project.smart_to_do.utils.DateFormatUtil
+import com.project.smart_to_do.viewmodel.TaskViewModel
+import java.util.*
+
+
+class CalendarFragment : Fragment(R.layout.fragment_calendar) {
+    private lateinit var binding: FragmentCalendarBinding
+    private lateinit var mTaskViewModel: TaskViewModel
+    private lateinit var adapter: CalendarPickerAdapter
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragmentCalendarBinding.bind(view)
+        initAdapter()
+        setupEvents()
+        this.pickDate()
+    }
+
+    private fun initAdapter() {
+        adapter = CalendarPickerAdapter()
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun pickDate() {
+        binding.calendarView.shouldDrawIndicatorsBelowSelectedDays(true)
+        val firstDay = System.currentTimeMillis()
+        binding.dayTxt.text = getString(R.string.today)
+        binding.tvSelectMonth.text = DateFormatUtil.monthFormat().format(firstDay)
+        showRecyclerView(DateFormatUtil.dateFormat().format(firstDay).toString())
+        binding.calendarView.setListener(object : CompactCalendarViewListener {
+            override fun onDayClick(dateClicked: Date) {
+                val searchQuery = DateFormatUtil.dateFormat().format(dateClicked).toString()
+                binding.dayTxt.text = DateUtils.getRelativeTimeSpanString(
+                    dateClicked.time, firstDay, DateUtils.DAY_IN_MILLIS,
+                    DateUtils.FORMAT_SHOW_DATE
+                ).toString()
+//                binding.dayTxt.text = DateUtils.getRelativeDateTimeString(dateClicked.time).toString()
+                showRecyclerView(searchQuery)
+            }
+
+            override fun onMonthScroll(firstDayOfNewMonth: Date) {
+                binding.tvSelectMonth.text = DateFormatUtil.monthFormat().format(firstDayOfNewMonth)
+                binding.dayTxt.text = DateFormatUtil.dateFormatWithChar().format(firstDayOfNewMonth)
+            }
+        })
+    }
+
+    private fun setupEvents() {
+        mTaskViewModel = ViewModelProvider(this)[TaskViewModel::class.java]
+        mTaskViewModel.readNotDoneData().observe(viewLifecycleOwner) { tasks ->
+            for (task in tasks) {
+                val calendar = Calendar.getInstance()
+                val date: ArrayList<String> =
+                    DateFormatUtil.dateFormat()
+                        .format(DateFormatUtil.hourly().parse(task.date) as Date).toString()
+                        .split(".") as ArrayList<String>
+                val dd: String = date[0]
+                val month: String = date[1]
+                val year: String = date[2]
+                calendar[Calendar.DAY_OF_MONTH] = dd.toInt()
+                calendar[Calendar.MONTH] = month.toInt() - 1
+                calendar[Calendar.YEAR] = year.toInt()
+                binding.calendarView.addEvent(
+                    Event(
+                        R.color.bgBottomNavigation,
+                        calendar.timeInMillis,
+                        task.title
+                    )
+                )
+            }
+        }
+    }
+
+    private fun showRecyclerView(searchQuery: String) {
+        mTaskViewModel.calendarSearch("%$searchQuery%").observe(viewLifecycleOwner)
+        { tasks ->
+            binding.eventNumberTxt.text = when (tasks.size) {
+                0 -> "No event"
+                1 -> "Only one event"
+                else -> "${tasks.size} events"
+            }
+            if (tasks.size == 0) {
+                binding.emptyLogo.visibility = View.VISIBLE
+                binding.cheerTxt.visibility = View.VISIBLE
+            } else {
+                binding.emptyLogo.visibility = View.GONE
+                binding.cheerTxt.visibility = View.GONE
+                binding.recyclerView.visibility = View.VISIBLE
+            }
+            tasks.let {
+                adapter.setData(it)
+            }
+
+        }
+    }
+
+}

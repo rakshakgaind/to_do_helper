@@ -1,0 +1,40 @@
+package com.project.smart_to_do.utils
+
+import androidx.recyclerview.widget.DiffUtil
+import com.project.smart_to_do.data.Task
+
+class TaskDiffUtil(
+    private val oldList: MutableList<Task>,
+    private val newList: MutableList<Task>
+) : DiffUtil.Callback() {
+    override fun getOldListSize(): Int = oldList.size
+
+
+    override fun getNewListSize(): Int = newList.size
+
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+        oldList[oldItemPosition] == newList[newItemPosition]
+
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean = when {
+        oldList[oldItemPosition].isDone != newList[newItemPosition].isDone -> {
+            false
+        }
+        oldList[oldItemPosition].title != newList[newItemPosition].title -> {
+            false
+        }
+        oldList[oldItemPosition].date != newList[newItemPosition].date -> {
+            false
+        }
+        oldList[oldItemPosition].description != newList[newItemPosition].description -> {
+            false
+        }
+        oldList[oldItemPosition].id != newList[newItemPosition].id -> {
+            false
+        }
+        else -> {
+            true
+        }
+    }
+
+
+}
